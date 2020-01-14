@@ -104,11 +104,12 @@ class KubernetesHTTPAdapter(requests.adapters.HTTPAdapter):
             exec_conf = config.user["exec"]
 
             if exec_conf["apiVersion"] == "client.authentication.k8s.io/v1alpha1":
+                cmd_env_vars = dict(os.environ)
                 for env_var in exec_conf.get("env") or []:
-                    os.environ[env_var["name"]] = env_var["value"]
+                    cmd_env_vars[env_var["name"]] = env_var["value"]
 
                 output = subprocess.check_output(
-                    [exec_conf["command"]] + exec_conf["args"]
+                    [exec_conf["command"]] + exec_conf["args"], env=cmd_env_vars
                 )
 
                 parsed_out = json.loads(output)
