@@ -102,8 +102,8 @@ class KubernetesHTTPAdapter(requests.adapters.HTTPAdapter):
 
         elif "exec" in config.user:
             exec_conf = config.user["exec"]
-            if "command" in exec_conf:
 
+            if exec_conf["apiVersion"] == "client.authentication.k8s.io/v1alpha1":
                 for env_var in exec_conf.get('env') or []:
                     os.environ[env_var['name']] = env_var['value']
 
