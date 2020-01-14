@@ -104,15 +104,15 @@ class KubernetesHTTPAdapter(requests.adapters.HTTPAdapter):
             exec_conf = config.user["exec"]
 
             if exec_conf["apiVersion"] == "client.authentication.k8s.io/v1alpha1":
-                for env_var in exec_conf.get('env') or []:
-                    os.environ[env_var['name']] = env_var['value']
+                for env_var in exec_conf.get("env") or []:
+                    os.environ[env_var["name"]] = env_var["value"]
 
                 output = subprocess.check_output(
-                    [exec_conf['command']] + exec_conf['args']
+                    [exec_conf["command"]] + exec_conf["args"]
                 )
 
                 parsed_out = json.loads(output)
-                token = parsed_out['status']['token']
+                token = parsed_out["status"]["token"]
 
             request.headers["Authorization"] = "Bearer {}".format(token)
 
